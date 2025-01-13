@@ -1,0 +1,75 @@
+/* 全局样式 */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* 亚克力效果 */
+#notes-container {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 便签样式 */
+.note {
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+.note:hover {
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 文本区域样式 */
+.note textarea {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;
+  padding: 10px;
+  box-sizing: border-box;
+  background: transparent;
+  resize: none;
+}
+
+/* 删除按钮样式 */
+.note button {
+  font-size: 18px;
+  color: #666;
+  padding: 5px;
+  z-index: 1;
+}
+
+.note button:hover {
+  color: #000;
+}
+
+/* 颜色选择器样式 */
+.note input[type="color"] {
+  width: 20px;
+  height: 20px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* 设置面板样式 */
+#settings-panel {
+  z-index: 1000;
+}
+
+#settings-panel label {
+  color: #333;
+  margin-right: 10px;
+}
+
+#settings-panel input[type="range"] {
+  width: 150px;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sticky Notes</title>
+    <style>
+      #settings-btn {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+      }
+      #settings-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+      #settings-panel {
+        position: fixed;
+        top: 60px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 20px;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="settings-btn">⚙️</button>
+    <div id="settings-panel">
+      <label for="blur-range">Blur:</label>
+      <input type="range" id="blur-range" min="0" max="20" value="10">
+    </div>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
