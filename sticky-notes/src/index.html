@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sticky Notes</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
       #settings-btn {
         position: fixed;
@@ -31,15 +32,25 @@
         backdrop-filter: blur(10px);
         display: none;
       }
+      /* body{
+        backdrop-filter: blut(10px);
+        background: transparent;
+      } */
     </style>
   </head>
   <body>
     <button id="settings-btn">⚙️</button>
     <div id="settings-panel">
-      <label for="blur-range">Blur:</label>
-      <input type="range" id="blur-range" min="0" max="20" value="10">
+      <div class="setting-item">
+        <label>快捷键设置：</label>
+        <div class="shortcut-input" id="shortcut-input">
+          <span id="current-shortcut">Ctrl+Alt+Space</span>
+          <button id="record-shortcut">重新设置</button>
+          <button id="apply-shortcut" disabled>应用</button>
+        </div>
+        <div class="hint">点击"重新设置"后按下新的快捷键组合，然后点击"应用"</div>
+      </div>
     </div>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>

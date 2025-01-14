@@ -2,15 +2,10 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: auto;
+  resize: both;
   background: transparent;
-}
-
-/* 亚克力效果 */
-#notes-container {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.5);
+  animation: fadeIn 1s forwards;
 }
 
 /* 便签样式 */
@@ -20,6 +15,8 @@ body {
   transition: box-shadow 0.3s ease;
   min-width: 200px;
   min-height: 200px;
+  resize: both;
+  overflow: hidden;
 }
 
 .note:hover {
@@ -29,13 +26,13 @@ body {
 /* 文本区域样式 */
 .note textarea {
   font-family: Arial, sans-serif;
-  font-size: 14px;
+  font-size: 20px;
   line-height: 1.5;
   outline: none;
   padding: 10px;
   box-sizing: border-box;
   background: transparent;
-  resize: none;
+  resize: both;
 }
 
 /* 删除按钮样式 */
@@ -43,7 +40,7 @@ body {
   font-size: 18px;
   color: #666;
   padding: 5px;
-  z-index: 1;
+  
 }
 
 .note button:hover {
@@ -54,22 +51,64 @@ body {
 .note input[type="color"] {
   width: 20px;
   height: 20px;
-  border: none;
+  border: 0;
   padding: 0;
   cursor: pointer;
-  z-index: 1;
 }
 
 /* 设置面板样式 */
 #settings-panel {
   z-index: 1000;
+  min-width: 300px;
 }
 
-#settings-panel label {
+.setting-item {
+  margin-bottom: 15px;
+}
+
+.setting-item label {
   color: #333;
   margin-right: 10px;
+  font-weight: bold;
 }
 
-#settings-panel input[type="range"] {
-  width: 150px;
+.shortcut-input {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+}
+
+#current-shortcut {
+  flex: 1;
+  font-family: monospace;
+  color: #444;
+}
+
+#record-shortcut {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#apply-shortcut {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#record-shortcut:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.hint {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
 }

@@ -1,22 +1,107 @@
+
 // 设置面板交互
-const settingsBtn = document.getElementById('settings-btn');
-const settingsPanel = document.getElementById('settings-panel');
-const blurRange = document.getElementById('blur-range');
+function initSettings() {
+  const settingsBtn = document.getElementById('settings-btn');
+  const settingsPanel = document.getElementById('settings-panel');
+  const recordBtn = document.getElementById('record-shortcut');
+  const currentShortcut = document.getElementById('current-shortcut');
 
-settingsBtn.addEventListener('click', () => {
-  settingsPanel.style.display = settingsPanel.style.display === 'block' ? 'none' : 'block';
-});
+  if (settingsBtn && settingsPanel && recordBtn && currentShortcut) {
+    // 确保按钮可点击
+    settingsBtn.style.pointerEvents = 'auto';
+    settingsBtn.style.zIndex = '1000';
+    
+    settingsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      settingsPanel.style.display = settingsPanel.style.display === 'block' ? 'none' : 'block';
+    });
 
-blurRange.addEventListener('input', (e) => {
-  document.body.style.backdropFilter = `blur(${e.target.value}px)`;
-});
+    // 快捷键记录状态
+    let isRecording = false;
+    let newShortcut = {
+      ctrl: false,
+      alt: false,
+      shift: false,
+      key: null
+    };
+
+    const applyBtn = document.getElementById('apply-shortcut');
+    let pendingShortcut = null;
+
+    recordBtn.addEventListener('click', () => {
+      isRecording = true;
+      currentShortcut.textContent = '按下新的快捷键...';
+      applyBtn.disabled = true;
+    });
+
+    // 捕获快捷键
+    const handleKeyDown = (e) => {
+      if (isRecording) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // 只处理非修饰键
+        if (['Control', 'Alt', 'Shift', 'Meta'].includes(e.key)) {
+          return;
+        }
+
+        pendingShortcut = {
+          ctrl: e.ctrlKey,
+          alt: e.altKey,
+          shift: e.shiftKey,
+          key: keyName
+        };
+        
+        // 更新显示
+        const keys = [];
+        if (pendingShortcut.ctrl) keys.push('Ctrl');
+        if (pendingShortcut.alt) keys.push('Alt');
+        if (pendingShortcut.shift) keys.push('Shift');
+        keys.push(keyName.toUpperCase());
+        currentShortcut.textContent = keys.join('+');
+        
+        isRecording = false;
+        applyBtn.disabled = false;
+        
+        // 移除事件监听器
+        document.removeEventListener('keydown', handleKeyDown);
+      }
+    };
+
+    recordBtn.addEventListener('click', () => {
+      isRecording = true;
+      currentShortcut.textContent = '按下新的快捷键...';
+      applyBtn.disabled = true;
+      document.addEventListener('keydown', handleKeyDown);
+    });
+
+    // 应用快捷键
+    applyBtn.addEventListener('click', () => {
+      if (pendingShortcut) {
+        try {
+          window.__TAURI__.core.invoke('update_shortcut', { newShortcut: pendingShortcut });
+            applyBtn.disabled = true;
+            pendingShortcut = null;
+          } 
+         catch (err) {
+          console.error('Failed to update shortcut:', err);
+          currentShortcut.textContent = '设置失败，请重试';
+          applyBtn.disabled = true;
+        }
+      }
+    });
+  }
+}
 
 // 便签数据存储
 let notes = [];
 let currentColor = '#ffff88'; // 默认黄色
 
 // 初始化
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
+
+  // 初始化设置面板
+  initSettings();
   // 创建主容器
   const container = document.createElement('div');
   container.id = 'notes-container';
@@ -25,7 +110,8 @@ window.addEventListener("DOMContentLoaded", () => {
   container.style.left = '0';
   container.style.width = '100vw';
   container.style.height = '100vh';
-  container.style.pointerEvents = 'none';
+  container.style.pointerEvents = 'auto';
+  container.style.zIndex = '0'; // 降低z-index确保设置按钮可点击
   document.body.appendChild(container);
 
   // 添加快捷键监听
@@ -45,13 +131,12 @@ function createNote() {
   note.className = 'note';
   note.style.backgroundColor = currentColor;
   note.style.position = 'absolute';
-  note.style.width = '200px';
-  note.style.height = '200px';
+  note.style.width = '180px';
+  note.style.height = '180px';
   note.style.padding = '10px';
-  note.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.2)';
   note.style.pointerEvents = 'auto';
   note.style.resize = 'both';
-  note.style.overflow = 'auto';
+  note.style.overflow = 'hidden';
   
   // 添加内容编辑区域
   const textarea = document.createElement('textarea');
@@ -59,7 +144,8 @@ function createNote() {
   textarea.style.height = '100%';
   textarea.style.border = 'none';
   textarea.style.background = 'transparent';
-  textarea.style.resize = 'none';
+  textarea.style.resize = 'both';
+  textarea.style.pointerEvents='auto';
   note.appendChild(textarea);
 
   // 添加删除按钮
@@ -82,8 +168,8 @@ function createNote() {
   colorPicker.type = 'color';
   colorPicker.value = currentColor;
   colorPicker.style.position = 'absolute';
-  colorPicker.style.bottom = '0';
-  colorPicker.style.right = '0';
+  colorPicker.style.bottom = '10px';
+  colorPicker.style.right = '10px';
   colorPicker.onchange = (e) => {
     note.style.backgroundColor = e.target.value;
     currentColor = e.target.value;
@@ -102,8 +188,16 @@ function createNote() {
 // 使元素可拖动
 function makeDraggable(element) {
   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  element.onmousedown = dragMouseDown;
-
+  element.onmousedown = (e)=>{
+    const rect = element.getBoundingClientRect();
+    const resizAreaSize = 15;
+    const isInResizeArea =
+      e.clientX > rect.right - resizAreaSize &&
+      e.clientY > rect.bottom - resizAreaSize;
+    if (!isInResizeArea && e.target === element){
+      dragMouseDown(e);
+    }
+  };
   function dragMouseDown(e) {
     e = e || window.event;
     e.preventDefault();
