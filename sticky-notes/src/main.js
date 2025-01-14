@@ -1,4 +1,126 @@
 
+// 语言设置
+let currentLang = localStorage.getItem('sticky-notes-lang') || 'zh';
+
+// 语言文本
+const langText = {
+  zh: {
+    shortcut: '快捷键',
+    record: '重置快捷键',
+    apply: '应用',
+    language: '语言',
+    chinese: '中文',
+    english: 'English',
+    spanish: 'Español',
+    japanese: '日本語',
+    korean: '한국어',
+    shortcutHint: '点击"重置快捷键"后按下新的快捷键组合，然后点击"应用"'
+  },
+  en: {
+    shortcut: 'Shortcut',
+    record: 'Reset Shortcut',
+    apply: 'Apply',
+    language: 'Language',
+    chinese: '中文',
+    english: 'English',
+    spanish: 'Español',
+    japanese: 'Japanese',
+    korean: 'Korean',
+    shortcutHint: 'Click "Reset Shortcut", then press new shortcut combination, and click "Apply"'
+  },
+  es: {
+    shortcut: 'Atajo',
+    record: 'Restablecer atajo',
+    apply: 'Aplicar',
+    language: 'Idioma',
+    chinese: 'Chino',
+    english: 'Inglés',
+    spanish: 'Español',
+    japanese: 'Japonés',
+    korean: 'Coreano',
+    shortcutHint: 'Haga clic en "Restablecer atajo", luego presione la nueva combinación de teclas y haga clic en "Aplicar"'
+  },
+  ja: {
+    shortcut: 'ショートカット',
+    record: 'ショートカットをリセット',
+    apply: '適用',
+    language: '言語',
+    chinese: '中国語',
+    english: '英語',
+    spanish: 'スペイン語',
+    japanese: '日本語',
+    korean: '韓国語',
+    shortcutHint: '「ショートカットをリセット」をクリックし、新しいショートカットを押して、「適用」をクリックします'
+  },
+  ko: {
+    shortcut: '단축키',
+    record: '단축키 재설정',
+    apply: '적용',
+    language: '언어',
+    chinese: '중국어',
+    english: '영어',
+    spanish: '스페인어',
+    japanese: '일본어',
+    korean: '한국어',
+    shortcutHint: '"단축키 재설정"을 클릭한 후 새로운 단축키 조합을 누르고 "적용"을 클릭하세요'
+  },
+  ru: {
+    shortcut: 'Горячая клавиша',
+    record: 'Сбросить сочетание',
+    apply: 'Применить',
+    language: 'Язык',
+    chinese: 'Китайский',
+    english: 'Английский',
+    spanish: 'Испанский',
+    japanese: 'Японский',
+    korean: 'Корейский',
+    french: 'Французский',
+    german: 'Немецкий',
+    russian: 'Русский',
+    shortcutHint: 'Нажмите "Сбросить сочетание", затем введите новую комбинацию и нажмите "Применить"'
+  },
+  fr: {
+    shortcut: 'Raccourci',
+    record: 'Réinitialiser le raccourci',
+    apply: 'Appliquer',
+    language: 'Langue',
+    chinese: 'Chinois',
+    english: 'Anglais',
+    spanish: 'Espagnol',
+    japanese: 'Japonais',
+    korean: 'Coréen',
+    french: 'Français',
+    german: 'Allemand',
+    russian: 'Russe',
+    shortcutHint: 'Cliquez sur "Réinitialiser le raccourci", puis appuyez sur la nouvelle combinaison et cliquez sur "Appliquer"'
+  },
+  de: {
+    shortcut: 'Tastenkürzel',
+    record: 'Tastenkürzel zurücksetzen',
+    apply: 'Übernehmen',
+    language: 'Sprache',
+    chinese: 'Chinesisch',
+    english: 'Englisch',
+    spanish: 'Spanisch',
+    japanese: 'Japanisch',
+    korean: 'Koreanisch',
+    french: 'Französisch',
+    german: 'Deutsch',
+    russian: 'Russisch',
+    shortcutHint: 'Klicken Sie auf "Tastenkürzel zurücksetzen", drücken Sie dann die neue Tastenkombination und klicken Sie auf "Übernehmen"'
+  }
+};
+
+// 更新界面语言
+function updateUILanguage() {
+  const lang = langText[currentLang];
+  document.getElementById('shortcut-label').textContent = lang.shortcut;
+  document.getElementById('record-shortcut').textContent = lang.record;
+  document.getElementById('apply-shortcut').textContent = lang.apply;
+  document.getElementById('language-label').textContent = lang.language;
+  document.querySelector('.hint').textContent = lang.shortcutHint || 'Click "Reset Shortcut", then press new shortcut combination, and click "Apply"';
+}
+
 // 设置面板交互
 function initSettings() {
   const settingsBtn = document.getElementById('settings-btn');
@@ -6,7 +128,62 @@ function initSettings() {
   const recordBtn = document.getElementById('record-shortcut');
   const currentShortcut = document.getElementById('current-shortcut');
 
+  // 初始化界面语言
+  updateUILanguage();
+
+  // 语言切换事件
+  document.getElementById('lang-zh').addEventListener('click', () => {
+    currentLang = 'zh';
+    localStorage.setItem('sticky-notes-lang', currentLang);
+    updateUILanguage();
+  });
+
+  document.getElementById('lang-en').addEventListener('click', () => {
+    currentLang = 'en';
+    localStorage.setItem('sticky-notes-lang', currentLang);
+    updateUILanguage();
+  });
+
+  document.getElementById('lang-es').addEventListener('click', () => {
+    currentLang = 'es';
+    localStorage.setItem('sticky-notes-lang', currentLang);
+    updateUILanguage();
+  });
+
+  document.getElementById('lang-ja').addEventListener('click', () => {
+    currentLang = 'ja';
+    localStorage.setItem('sticky-notes-lang', currentLang);
+    updateUILanguage();
+  });
+
+  document.getElementById('lang-ko').addEventListener('click', () => {
+    currentLang = 'ko';
+    localStorage.setItem('sticky-notes-lang', currentLang);
+    updateUILanguage();
+  });
+
+  document.getElementById('lang-ru').addEventListener('click', () => {
+    currentLang = 'ru';
+    localStorage.setItem('sticky-notes-lang', currentLang);
+    updateUILanguage();
+  });
+
+  document.getElementById('lang-fr').addEventListener('click', () => {
+    currentLang = 'fr';
+    localStorage.setItem('sticky-notes-lang', currentLang);
+    updateUILanguage();
+  });
+
+  document.getElementById('lang-de').addEventListener('click', () => {
+    currentLang = 'de';
+    localStorage.setItem('sticky-notes-lang', currentLang);
+    updateUILanguage();
+  });
+
   if (settingsBtn && settingsPanel && recordBtn && currentShortcut) {
+    // 确保语言切换按钮可点击
+    document.getElementById('lang-zh').style.pointerEvents = 'auto';
+    document.getElementById('lang-en').style.pointerEvents = 'auto';
     // 确保按钮可点击
     settingsBtn.style.pointerEvents = 'auto';
     settingsBtn.style.zIndex = '1000';
