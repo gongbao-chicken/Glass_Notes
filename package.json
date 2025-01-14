@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@tauri-apps/api": "^2.2.0",
     "marked": "^15.0.6"
   }
 }
