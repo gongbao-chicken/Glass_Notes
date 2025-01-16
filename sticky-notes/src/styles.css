@@ -28,6 +28,82 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* 关于窗口样式 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  position: fixed;
+  background-color: #fefefe;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 50%;
+  max-width: 600px;
+  animation: fadeIn 0.3s;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+
+}
+
+
+
+.modal-header h2 {
+  align-items: center;
+  margin: 0;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  top: 10px;
+  right: 10px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+.settings-link {
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.settings-link:hover {
+  text-decoration: underline;
+}
+
 #note-context-menu div {
   padding: 8px 16px;
   cursor: pointer;
@@ -339,8 +415,3 @@ input:checked + .slider:before {
   transform: translateX(20px);
 }
 
-#auto-start-label {
-  margin-left: 10px;
-  font-size: 14px;
-  color: #333;
-}

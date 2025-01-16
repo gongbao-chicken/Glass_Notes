@@ -51,9 +51,16 @@
         <div class="hint">点击"重新设置"后按下新的快捷键组合，然后点击"应用"</div>
       </div>
       <div class="setting-item">
-        <label id="auto-start-label"></label>
+        <label id="auto-start-label">开机自动启动</label>
         <label class="switch">
           <input type="checkbox" id="auto-start-switch">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <label id="markdown-preview-label">Markdown预览</label>
+        <label class="switch">
+          <input type="checkbox" id="markdown-preview-switch">
           <span class="slider"></span>
         </label>
       </div>
@@ -70,7 +77,21 @@
           <button id="lang-de">Deutsch</button>
         </div>
       </div>
+      <div class="setting-item">
+        <a id="about-title" href="#" class="settings-link"></a>
+      </div>
     </div>
+      <div id="about-modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <img src="assets/sticky_notes.svg" alt="App Icon" style="width: 128px; height: 128px;margin: 20px;" onerror="console.error('图片加载失败')" >
+          <div class="modal-header">
+            <h2 id="about-Stickynotes"></h2>
+          </div>
+          <div id="about-content"></div>
+        </div>
+      </div>
+    
     <script type="module" src="./main.js"></script>
   </body>
 </html>
