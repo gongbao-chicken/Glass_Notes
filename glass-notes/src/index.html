@@ -3,37 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sticky Notes</title>
+    <title>Glass notes</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-      #settings-btn {
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        z-index: 1000;
-        background: rgba(40, 40, 40, 0.2);
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
-        backdrop-filter: blur(10px);
-      }
-      #settings-btn:hover {
-        background: rgba(40, 40, 40, 0.3);
-      }
-      #settings-panel {
-        position: fixed;
-        top: 60px;
-        right: 10px;
-        background: rgba(37, 37, 37, 0.2);
-        padding: 20px;
-        border-radius: 10px;
-        backdrop-filter: blur(10px);
-        display: none;
-      }
-
-    </style>
   </head>
   <body>
     <button id="settings-btn">⚙️</button>
@@ -90,15 +61,14 @@
       <div id="about-modal" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
-          <img src="assets/sticky_notes.svg" alt="App Icon" style="width: 128px; height: 128px;margin: 20px;" onerror="console.error('图片加载失败')" >
+          <img src="assets/Glass_notes.svg" alt="App Icon" >
           <div class="modal-header">
-            <h2 id="about-Stickynotes"></h2>
-            <p id = "version" style="text-align: center;">V0.1.2</p>
+            <h2 id="about-Glassnotes"></h2>
+            <p id = "version">V0.1.2 ©2025 Scour Fan</p>
           </div>
           <div id="about-content"></div>
         </div>
       </div>
-    
     <script type="module" src="./main.js"></script>
   </body>
 </html>

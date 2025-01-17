@@ -52,8 +52,9 @@ fn update_shortcut(app: tauri::AppHandle, newShortcut: serde_json::Value) -> Res
                         if window.is_visible().unwrap() {
                             window.hide().unwrap();
                         } else {
-                            window.show().unwrap();
                             window.set_focus().unwrap();
+                            window.show().unwrap();
+                            
                         }
                     }
                 }
@@ -89,8 +90,9 @@ fn main() {
                                 if window.is_visible().unwrap() {
                                     window.hide().unwrap();
                                 } else {
-                                    window.show().unwrap();
                                     window.set_focus().unwrap();
+                                    window.show().unwrap();
+                                    
                                 }
                             }
                         })

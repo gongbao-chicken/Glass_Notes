@@ -1,10 +1,8 @@
 import { defineConfig } from 'vite'
-import path from 'path'
-
+import path from 'path';
 const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig({
-  root: path.resolve(__dirname, 'src'),
 
   // prevent vite from obscuring rust errors
   clearScreen: false,
@@ -18,6 +16,9 @@ export default defineConfig({
   // Env variables starting with the item of `envPrefix` will be exposed in tauri's source code through `import.meta.env`.
   envPrefix: ['VITE_', 'TAURI_ENV_*'],
   build: {
+    rollupOptions: {
+      input: path.resolve(__dirname, 'src/index.html'), // 指定入口文件路径
+    },
     // Tauri uses Chromium on Windows and WebKit on macOS and Linux
     target:
       process.env.TAURI_ENV_PLATFORM == 'windows'

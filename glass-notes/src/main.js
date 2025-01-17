@@ -261,7 +261,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     e.preventDefault();
     const lang = langText[currentLang];
     aboutLink.textContent = lang.about;
-    document.getElementById('about-Stickynotes').textContent = lang.about;
+    document.getElementById('about-Glassnotes').textContent = lang.about;
     document.getElementById('about-content').innerHTML = `
       <p>${lang.aboutinfo}</p>
     `;

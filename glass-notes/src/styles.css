@@ -58,15 +58,19 @@ html,body {
   align-items: center;
 }
 
+.modal-content img{
+  width: 128px; 
+  height: 128px;
+  margin: 20px;
+}
 .modal-header {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
   flex-direction: column;
   margin: 10px;
+  text-align: center;
 }
-
-
 
 .modal-header h2 {
   align-items: center;
@@ -436,4 +440,29 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(20px);
 }
-
+#settings-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: rgba(40, 40, 40, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+#settings-btn:hover {
+  background: rgba(40, 40, 40, 0.3);
+}
+#settings-panel {
+  position: fixed;
+  top: 60px;
+  right: 10px;
+  background: rgba(37, 37, 37, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  display: none;
+}

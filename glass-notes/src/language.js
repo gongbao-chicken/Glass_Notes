@@ -1,9 +1,9 @@
 // 语言设置
-export let currentLang = localStorage.getItem('sticky-notes-lang') || 'zh';
+export let currentLang = localStorage.getItem('glass-notes-lang') || 'zh';
 
 export function setCurrentLang(lang) {
   currentLang = lang;
-  localStorage.setItem('sticky-notes-lang', lang);
+  localStorage.setItem('glass-notes-lang', lang);
 }
 
 // 语言文本
@@ -31,8 +31,8 @@ export const langText = {
           markdownPreview: 'Markdown预览',
           markdownPreviewEnabled: '已启用',
           markdownPreviewDisabled: '已禁用',
-          about: '关于 Sticky Notes',
-          aboutinfo:'本应用基于TAURI平台，由AI辅助生成，用户数据全部离线保存在本地，不涉及任何信息外发，特此声明。联系方式：pinyinzhenhao@aliyun.com'
+          about: '关于 Glass notes',
+          aboutinfo:'本应用基于TAURI平台，由AI辅助生成，用户数据全部离线保存在本地，不涉及任何信息外发，特此声明。<br>联系方式：pinyinzhenhao@aliyun.com'
         },
     en: {
       shortcut: 'Shortcut key to open the interface',
@@ -57,8 +57,8 @@ export const langText = {
       markdownPreview: 'Markdown Preview',
       markdownPreviewEnabled: 'Enabled',
       markdownPreviewDisabled: 'Disabled',
-      about: 'About Sticky Notes',
-      aboutinfo: 'This application is based on the TAURI platform, AI-assisted development. All user data is stored locally offline, no information is sent out. Contact: pinyinzhenhao@aliyun.com'
+      about: 'About Glass notes',
+      aboutinfo: 'This application is based on the TAURI platform, AI-assisted development. All user data is stored locally offline, no information is sent out. <br> Contact: pinyinzhenhao@aliyun.com'
     },
     es: {
       shortcut: 'Tecla de acceso rápido para abrir la interfaz',
@@ -83,8 +83,8 @@ export const langText = {
       markdownPreview: 'Vista previa de Markdown',
       markdownPreviewEnabled: 'Habilitado',
       markdownPreviewDisabled: 'Deshabilitado',
-      about: 'Acerca de Sticky Notes',
-      aboutinfo: 'Esta aplicación está basada en la plataforma TAURI, desarrollada con asistencia de IA. Todos los datos del usuario se almacenan localmente sin conexión, no se envía ninguna información. Contacto: pinyinzhenhao@aliyun.com'
+      about: 'Acerca de Glass notes',
+      aboutinfo: 'Esta aplicación está basada en la plataforma TAURI, desarrollada con asistencia de IA. Todos los datos del usuario se almacenan localmente sin conexión, no se envía ninguna información. <br>Contacto: pinyinzhenhao@aliyun.com'
     },
     ja: {
       shortcut: 'インターフェースを開くショートカットキー',
@@ -109,8 +109,8 @@ export const langText = {
       markdownPreview: 'Markdownプレビュー',
       markdownPreviewEnabled: '有効',
       markdownPreviewDisabled: '無効',
-      about: 'Sticky Notesについて',
-      aboutinfo: 'このアプリケーションはTAURIプラットフォームに基づいており、AI支援開発です。すべてのユーザーデータはローカルにオフラインで保存され、情報は送信されません。連絡先: pinyinzhenhao@aliyun.com'
+      about: 'Glass notesについて',
+      aboutinfo: 'このアプリケーションはTAURIプラットフォームに基づいており、AI支援開発です。すべてのユーザーデータはローカルにオフラインで保存され、情報は送信されません。<br>連絡先: pinyinzhenhao@aliyun.com'
     },
     ko: {
       shortcut: '인터페이스 호출 단축키',
@@ -135,8 +135,8 @@ export const langText = {
       markdownPreview: 'Markdown 미리보기',
       markdownPreviewEnabled: '활성화됨',
       markdownPreviewDisabled: '비활성화됨',
-      about: 'Sticky Notes 정보',
-      aboutinfo: '이 애플리케이션은 TAURI 플랫폼을 기반으로 하며 AI 지원 개발입니다. 모든 사용자 데이터는 로컬에서 오프라인으로 저장되며 정보는 전송되지 않습니다. 연락처: pinyinzhenhao@aliyun.com'
+      about: 'Glass notes 정보',
+      aboutinfo: '이 애플리케이션은 TAURI 플랫폼을 기반으로 하며 AI 지원 개발입니다. 모든 사용자 데이터는 로컬에서 오프라인으로 저장되며 정보는 전송되지 않습니다. <br>연락처: pinyinzhenhao@aliyun.com'
     },
     ru: {
       shortcut: 'Горячая клавиша для вызова интерфейса',
@@ -164,8 +164,8 @@ export const langText = {
       markdownPreview: 'Предпросмотр Markdown',
       markdownPreviewEnabled: 'Включено',
       markdownPreviewDisabled: 'Отключено',
-      about: 'О Sticky Notes',
-      aboutinfo: 'Это приложение основано на платформе TAURI, разработано с помощью ИИ. Все пользовательские данные хранятся локально в автономном режиме, информация не передается. Контакты: pinyinzhenhao@aliyun.com'
+      about: 'О Glass notes',
+      aboutinfo: 'Это приложение основано на платформе TAURI, разработано с помощью ИИ. Все пользовательские данные хранятся локально в автономном режиме, информация не передается.<br>Контакты: pinyinzhenhao@aliyun.com'
     },
     fr: {
       shortcut: 'Raccourci clavier pour ouvrir l\'interface',
@@ -193,8 +193,8 @@ export const langText = {
       markdownPreview: 'Aperçu Markdown',
       markdownPreviewEnabled: 'Activé',
       markdownPreviewDisabled: 'Désactivé',
-      about: 'À propos de Sticky Notes',
-      aboutinfo: 'Cette application est basée sur la plateforme TAURI, développée avec l\'aide de l\'IA. Toutes les données utilisateur sont stockées localement hors ligne, aucune information n\'est transmise. Contact : pinyinzhenhao@aliyun.com'
+      about: 'À propos de Glass notes',
+      aboutinfo: 'Cette application est basée sur la plateforme TAURI, développée avec l\'aide de l\'IA. Toutes les données utilisateur sont stockées localement hors ligne, aucune information n\'est transmise.<br>Contact : pinyinzhenhao@aliyun.com'
     },
     de: {
       shortcut: 'Tastenkürzel zum Aufrufen der Benutzeroberfläche',
@@ -222,8 +222,8 @@ export const langText = {
       markdownPreview: 'Markdown-Vorschau',
       markdownPreviewEnabled: 'Aktiviert',
       markdownPreviewDisabled: 'Deaktiviert',
-      about: 'Über Sticky Notes',
-      aboutinfo: 'Diese Anwendung basiert auf der TAURI-Plattform und wurde mit KI-Unterstützung erstellt. Alle Benutzerdaten werden lokal offline gespeichert, es erfolgt keine Übermittlung von Informationen nach außen. Hierwith wird dies ausdrücklich erklärt. Kontakt: pinyinzhenhao@aliyun.com'
+      about: 'Über Glass notes',
+      aboutinfo: 'Diese Anwendung basiert auf der TAURI-Plattform und wurde mit KI-Unterstützung erstellt. Alle Benutzerdaten werden lokal offline gespeichert, es erfolgt keine Übermittlung von Informationen nach außen. Hierwith wird dies ausdrücklich erklärt. <br>Kontakt: pinyinzhenhao@aliyun.com'
     }
   // ... 其他语言保持不变
 };

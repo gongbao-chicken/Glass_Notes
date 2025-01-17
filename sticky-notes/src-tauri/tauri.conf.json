@@ -3,11 +3,11 @@
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "devUrl": "http://localhost:5173",
+    "devUrl": "http://localhost:5173/",
     "frontendDist": "../dist"
   },
   "productName": "Sticky Notes",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "identifier": "com.sticky.notes",
   "app": {
     "withGlobalTauri": true,
