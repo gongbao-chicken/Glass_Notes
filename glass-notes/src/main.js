@@ -304,7 +304,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   // 添加快捷键监听
   document.addEventListener('keydown', (e) => {
     // 处理新建便签快捷键
-    const noteShortcut = JSON.parse(localStorage.getItem('noteShortcut') || '{"ctrl":true,"alt":false,"shift":false,"key":"n"}');
+    const noteShortcut = JSON.parse(localStorage.getItem('noteShortcut') || '{"ctrl":true,"alt":false,"shift":false,"key":"keyn"}');
     if (e.ctrlKey === noteShortcut.ctrl &&
         e.altKey === noteShortcut.alt &&
         e.shiftKey === noteShortcut.shift &&

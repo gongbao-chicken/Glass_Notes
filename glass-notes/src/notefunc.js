@@ -1,4 +1,4 @@
-import { updateUILanguage, updateAutoStartLabel } from './language.js';
+import { updateUILanguage, updateAutoStartLabel, currentLang, langText } from './language.js';
 import MarkdownRenderer from './markdown.js';
 import { save } from '@tauri-apps/plugin-dialog';
 import { writeTextFile } from '@tauri-apps/plugin-fs';
@@ -136,7 +136,7 @@ export function showContextMenu(note, x, y) {
 
   // 添加导出选项
   const exportItem = document.createElement('div');
-  exportItem.textContent = '导出便签';
+  exportItem.textContent = langText[currentLang].exportNote;
   exportItem.style.padding = '8px 16px';
   exportItem.style.cursor = 'pointer';
   exportItem.addEventListener('click', () => exportNote(note));
@@ -156,23 +156,19 @@ export function showContextMenu(note, x, y) {
 export async function exportNote(note) {
   try {
     const content = note.querySelector('textarea').value;
-    const filePath = await window.__TAURI__.dialog.save({
+    const filePath = await save({
       filters: [{
         name: 'Text',
         extensions: ['txt']
       }]
     });
-
     if (filePath) {
-      await window.__TAURI__.fs.writeTextFile({
-        path: filePath,
-        contents: content
-      });
-      alert('便签导出成功！');
+      await writeTextFile(filePath, content);
+      alert(langText[currentLang].exportSuccess);
     }
   } catch (error) {
     console.error('导出失败:', error);
-    alert('便签导出失败，请重试');
+    alert(langText[currentLang].exportFailed);
   }
 }
 

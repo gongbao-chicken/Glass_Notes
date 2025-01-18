@@ -1,0 +1,47 @@
+Win64 OpenSSL Command Prompt
+
+OpenSSL 3.4.0 22 Oct 2024 (Library: OpenSSL 3.4.0 22 Oct 2024)
+built on: Tue Oct 22 23:27:41 2024 UTC
+platform: VC-WIN64A
+options:  bn(64,64)
+compiler: cl  /Z7 /Fdossl_static.pdb /Gs0 /GF /Gy /MD /W3 /wd4090 /nologo /O2 -DL_ENDIAN -DOPENSSL_PIC -D"OPENSSL_BUILDING_OPENSSL" -D"OPENSSL_SYS_WIN32" -D"WIN32_LEAN_AND_MEAN" -D"UNICODE" -D"_UNICODE" -D"_CRT_SECURE_NO_DEPRECATE" -D"_WINSOCK_DEPRECATED_NO_WARNINGS" -D"NDEBUG" -D_WINSOCK_DEPRECATED_NO_WARNINGS -D_WIN32_WINNT=0x0502
+OPENSSLDIR: "C:\Program Files\Common Files\SSL"
+ENGINESDIR: "C:\Program Files\OpenSSL\lib\engines-3"
+MODULESDIR: "C:\Program Files\OpenSSL\lib\ossl-modules"
+Seeding source: os-specific
+CPUINFO: OPENSSL_ia32cap=0x7ed8320b078bffff:0x40068c219c97a9
+
+C:\Users\天空>openssl req -x509 -newkey rsa:2048 -keyout glassnoteskey.pem -out glassnotecert.pem -days 365 -nodes
+...+............+.........+.+++++++++++++++++++++++++++++++++++++++*.......+......+......+........+......+.......+...+.....+.+.....+...+.......+.....+...+++++++++++++++++++++++++++++++++++++++*.+..+...+.+.........+...........+.+..+...............+...+...+............+..........+............+...+..+.+.................+....+..................+....................+......+....+..+.+..++++++
+..+.....+...+..........+...+..+++++++++++++++++++++++++++++++++++++++*.....+...........+...+...............+.......+..+.......+.....+.+..+.............+.....+++++++++++++++++++++++++++++++++++++++*.+..+.+......+...+..+....+..+...+...............+.+........+......+......+...+......+......+...+...+.............+..+.........+...+................+......+...+...+...+......+...+.....+......+.......+........+............+....+...+...+.....+.........+.+...+.........+.....+.......+......+...+.....+................+.....+....++++++
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:CN
+State or Province Name (full name) [Some-State]:GuangDong
+Locality Name (eg, city) []:ShenZhen
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Individual
+Organizational Unit Name (eg, section) []:Individual
+Common Name (e.g. server FQDN or YOUR name) []:Scour Fan
+Email Address []:pinyinzhenhao@aliyun.com
+
+C:\Users\天空>openssl pkcs12 -export -out glassnotescert.pfx -inkey glassnoteskey.pem -in glassnotecert.pem
+Enter Export Password:
+
+Verifying - Enter Export Password:
+
+
+C:\Users\天空>
+C:\Users\天空>
+C:\Users\天空>
+C:\Users\天空>ls
+'ls' 不是内部或外部命令，也不是可运行的程序
+或批处理文件。
+
+C:\Users\天空>
+C:\Users\天空>

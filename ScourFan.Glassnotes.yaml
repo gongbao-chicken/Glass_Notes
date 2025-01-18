@@ -1,0 +1,24 @@
+# MSIX Conversion Accelerator
+
+PackageName: Glass notes
+
+PublisherName: Scour Fan
+
+PackageVersion: 0.1.2.0
+
+EligibleForConversion: Yes
+
+ConversionStatus: Package Created. Need Validation
+
+Edition: Microsoft Windows 11 专业版
+
+MinimumOSVersion: 23H2
+
+MinimumOSBuild: 22631.4751
+
+Architecture: 64
+
+MSIXConversionToolVersion: 1.2024.405.0
+
+AcceleratorVersion: 1.0.0
+
