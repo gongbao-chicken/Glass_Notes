@@ -7,18 +7,19 @@
     "frontendDist": "../src/dist"
   },
   "productName": "Glass notes",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "identifier": "com.glass.notes",
   "app": {
     "withGlobalTauri": true,
+    "macOSPrivateApi": true,
     "windows": [
       {
         "title": "Glass notes",
-        "fullscreen": true,
+        "fullscreen": false,
         "resizable": false,
         "decorations": false,
         "transparent": true,
-        "alwaysOnTop": true,
+        "visible": false,
         "windowEffects":{
           "effects": ["acrylic"]
         }

@@ -1,8 +1,29 @@
 // 导入模块
-import MarkdownRenderer from './markdown.js';
 import { enable, disable, isEnabled } from '@tauri-apps/plugin-autostart';
-import { langText, updateUILanguage, updateAutoStartLabel, currentLang, setCurrentLang,updateMDpreviewLabel } from './language.js';
-import { createNote, loadNotes } from './notefunc.js';
+import { langText, updateUILanguage, updateAutoStartLabel, currentLang, setCurrentLang } from './language.js';
+import { createNote, loadNotes, loadNoteShortcut } from './notefunc.js';
+
+// Mac 的 Command 键和 Windows 的 Win 键都映射到 e.metaKey
+const IS_MAC = /Mac/i.test(navigator.userAgent);
+const META_LABEL = IS_MAC ? 'Cmd' : 'Win';
+
+// 把 e.code 格式化成可读键名（KeyN -> N、Digit1 -> 1，其余原样）
+function formatKeyCode(code) {
+  if (code.startsWith('Key')) return code.slice(3);
+  if (code.startsWith('Digit')) return code.slice(5);
+  return code;
+}
+
+// 快捷键对象的统一显示格式
+function formatShortcut(sc) {
+  const keys = [];
+  if (sc.ctrl) keys.push('Ctrl');
+  if (sc.alt) keys.push('Alt');
+  if (sc.shift) keys.push('Shift');
+  if (sc.meta) keys.push(META_LABEL);
+  keys.push(formatKeyCode(sc.key));
+  return keys.join('+');
+}
 
 
 
@@ -82,44 +103,43 @@ function initSettings() {
     const aboutLink = document.getElementById('about-title');
     aboutLink.textContent = langText[currentLang].about;
 
-    // Markdown预览开关事件
-    const markdownPreviewSwitch = document.getElementById('markdown-preview-switch');
-    const isPreviewEnabled = localStorage.getItem('markdownPreviewEnabled') === 'true';
-    markdownPreviewSwitch.checked = isPreviewEnabled;
-
-    markdownPreviewSwitch.addEventListener('change', (e) => {
-      localStorage.setItem('markdownPreviewEnabled', e.target.checked);
-      document.querySelectorAll('.note').forEach(note => {
-        const preview = note.querySelector('.markdown-preview');
-        const textarea = note.querySelector('textarea');
-        preview.style.display = e.target.checked ? 'block' : 'none';
-        textarea.style.width = e.target.checked ? '50%' : '100%';
-      });
-      updateMDpreviewLabel(e.target.checked)
-    });
-    
     settingsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       settingsPanel.style.display = settingsPanel.style.display === 'block' ? 'none' : 'block';
     });
 
+    // 背景模糊档位（仅 macOS 可调：Windows 亚克力是系统固定效果，无强度参数）
+    const blurItem = document.getElementById('blur-level-item');
+    if (!IS_MAC) {
+      blurItem.style.display = 'none';
+    } else {
+      const blurButtons = document.querySelectorAll('#blur-level-item .blur-level-buttons button');
+      const savedBlurLevel = () => {
+        const v = parseInt(localStorage.getItem('blurLevel'), 10);
+        return [0, 1, 2].includes(v) ? v : 1;
+      };
+      const applyBlurLevel = async (level) => {
+        try {
+          await window.__TAURI__.core.invoke('set_blur_level', { level });
+          localStorage.setItem('blurLevel', String(level));
+          blurButtons.forEach(btn =>
+            btn.classList.toggle('active', parseInt(btn.dataset.level, 10) === level));
+        } catch (err) {
+          console.error('Failed to set blur level:', err);
+        }
+      };
+      blurButtons.forEach(btn => {
+        btn.addEventListener('click', () => applyBlurLevel(parseInt(btn.dataset.level, 10)));
+      });
+      // 启动时应用保存的档位（Rust 侧初始化用的是默认液态玻璃档）
+      applyBlurLevel(savedBlurLevel());
+    }
+
     // 快捷键记录状态
     let isRecording = false;
-    let newShortcut = {
-      ctrl: false,
-      alt: false,
-      shift: false,
-      key: null
-    };
 
     const applyBtn = document.getElementById('apply-shortcut');
     let pendingShortcut = null;
-
-    recordBtn.addEventListener('click', () => {
-      isRecording = true;
-      currentShortcut.textContent = langText[currentLang].pressShortcut || '按下新的快捷键...';
-      applyBtn.disabled = true;
-    });
 
     // 捕获快捷键
     const handleKeyDown = (e) => {
@@ -136,16 +156,12 @@ function initSettings() {
           ctrl: e.ctrlKey,
           alt: e.altKey,
           shift: e.shiftKey,
+          meta: e.metaKey,
           key: keyName
         };
-        
+
         // 更新显示
-        const keys = [];
-        if (pendingShortcut.ctrl) keys.push('Ctrl');
-        if (pendingShortcut.alt) keys.push('Alt');
-        if (pendingShortcut.shift) keys.push('Shift');
-        keys.push(keyName.toUpperCase());
-        currentShortcut.textContent = keys.join('+');
+        currentShortcut.textContent = formatShortcut(pendingShortcut);
         
         isRecording = false;
         applyBtn.disabled = false;
@@ -162,17 +178,17 @@ function initSettings() {
       document.addEventListener('keydown', handleKeyDown);
     });
 
-    // 应用呼出窗口快捷键
-    applyBtn.addEventListener('click', () => {
+    // 应用呼出窗口快捷键（invoke 返回 Promise，必须 await 才能捕获 Rust 侧错误）
+    applyBtn.addEventListener('click', async () => {
       if (pendingShortcut) {
+        applyBtn.disabled = true;
         try {
-          window.__TAURI__.core.invoke('update_shortcut', { newShortcut: pendingShortcut });
-          applyBtn.disabled = true;
+          await window.__TAURI__.core.invoke('update_shortcut', { newShortcut: pendingShortcut });
           pendingShortcut = null;
         } catch (err) {
           console.error('Failed to update shortcut:', err);
-          currentShortcut.textContent = '设置失败，请重试';
-          applyBtn.disabled = true;
+          currentShortcut.textContent = langText[currentLang].shortcutFailed;
+          applyBtn.disabled = false;
         }
       }
     });
@@ -184,15 +200,17 @@ function initSettings() {
     let notePendingShortcut = null;
 
     if (noteRecordBtn && noteApplyBtn && currentNoteShortcut) {
+      // 独立的录制状态标志，避免与呼出窗口快捷键的录制互相干扰
+      let isNoteRecording = false;
       noteRecordBtn.addEventListener('click', () => {
-        isRecording = true;
+        isNoteRecording = true;
         currentNoteShortcut.textContent = langText[currentLang].pressShortcut || '按下新的快捷键...';
         noteApplyBtn.disabled = true;
         document.addEventListener('keydown', handleNoteShortcutKeyDown);
       });
 
       const handleNoteShortcutKeyDown = (e) => {
-        if (isRecording) {
+        if (isNoteRecording) {
           e.preventDefault();
           e.stopPropagation();
           
@@ -204,18 +222,14 @@ function initSettings() {
             ctrl: e.ctrlKey,
             alt: e.altKey,
             shift: e.shiftKey,
+            meta: e.metaKey,
             key: e.code
           };
-          
+
           // 更新显示
-          const keys = [];
-          if (notePendingShortcut.ctrl) keys.push('Ctrl');
-          if (notePendingShortcut.alt) keys.push('Alt');
-          if (notePendingShortcut.shift) keys.push('Shift');
-          keys.push(notePendingShortcut.key.toUpperCase());
-          currentNoteShortcut.textContent = keys.join('+');
-          
-          isRecording = false;
+          currentNoteShortcut.textContent = formatShortcut(notePendingShortcut);
+
+          isNoteRecording = false;
           noteApplyBtn.disabled = false;
           document.removeEventListener('keydown', handleNoteShortcutKeyDown);
         }
@@ -236,13 +250,8 @@ function initSettings() {
       });
 
       // 初始化显示
-      const savedNoteShortcut = JSON.parse(localStorage.getItem('noteShortcut') || '{"ctrl":true,"key":"n"}');
-      const keys = [];
-      if (savedNoteShortcut.ctrl) keys.push('Ctrl');
-      if (savedNoteShortcut.alt) keys.push('Alt');
-      if (savedNoteShortcut.shift) keys.push('Shift');
-      keys.push(savedNoteShortcut.key.toUpperCase());
-      currentNoteShortcut.textContent = keys.join('+');
+      const savedNoteShortcut = loadNoteShortcut();
+      currentNoteShortcut.textContent = formatShortcut(savedNoteShortcut);
       
     }
   }
@@ -282,8 +291,9 @@ window.addEventListener("DOMContentLoaded", async () => {
   const autoStartSwitch = document.getElementById('auto-start-switch');
   
   try {
-    const isAutoStartEnabled = await enable();
-    autoStartSwitch.checked = isAutoStartEnabled;
+    // 用 isEnabled 查询状态；enable 是"开启自启动"，误用会在每次启动时强行打开它
+    const isAutoStartEnabled = await isEnabled();
+    autoStartSwitch.checked = isAutoStartEnabled === true;
     updateAutoStartLabel();
   } catch (err) {
     console.error('Failed to get auto start status:', err);
@@ -303,11 +313,12 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   // 添加快捷键监听
   document.addEventListener('keydown', (e) => {
-    // 处理新建便签快捷键
-    const noteShortcut = JSON.parse(localStorage.getItem('noteShortcut') || '{"ctrl":true,"alt":false,"shift":false,"key":"keyn"}');
+    // 处理新建便签快捷键（容错读取，损坏的存储数据不能让整个监听器失效）
+    const noteShortcut = loadNoteShortcut();
     if (e.ctrlKey === noteShortcut.ctrl &&
         e.altKey === noteShortcut.alt &&
         e.shiftKey === noteShortcut.shift &&
+        e.metaKey === noteShortcut.meta &&
         e.code.toLowerCase() === noteShortcut.key.toLowerCase()) {
       createNote();
     }

@@ -1,76 +1,99 @@
-import { updateUILanguage, updateAutoStartLabel, currentLang, langText } from './language.js';
-import MarkdownRenderer from './markdown.js';
+import { currentLang, langText } from './language.js';
+import BlockEditor from './markdown.js';
 import { save } from '@tauri-apps/plugin-dialog';
 import { writeTextFile } from '@tauri-apps/plugin-fs';
 
 // 便签数据存储
-let notes = [];
 let currentColor = '#ffff88'; // 默认黄色
 
-// 创建新便签
-export function createNote() {
+// 新建便签快捷键的默认配置（key 为 e.code 键名，读取处共用这一份定义）
+export const DEFAULT_NOTE_SHORTCUT = { ctrl: true, alt: false, shift: false, meta: false, key: 'KeyN' };
+
+// 读取新建便签快捷键，容错旧格式或损坏的存储数据
+export function loadNoteShortcut() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('noteShortcut') || 'null');
+    if (!saved || typeof saved.key !== 'string') return { ...DEFAULT_NOTE_SHORTCUT };
+    return {
+      ctrl: !!saved.ctrl,
+      alt: !!saved.alt,
+      shift: !!saved.shift,
+      meta: !!saved.meta,
+      key: saved.key
+    };
+  } catch (err) {
+    console.error('Failed to parse note shortcut:', err);
+    return { ...DEFAULT_NOTE_SHORTCUT };
+  }
+}
+
+// 防抖保存：缩放等高频事件只在停下来之后写一次存储
+let saveTimer = null;
+export function scheduleSave() {
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    saveTimer = null;
+    saveNotes();
+  }, 200);
+}
+
+// 计算新便签的初始位置：按已有数量级联偏移，保证不超出屏幕
+function initialPosition() {
+  const count = document.querySelectorAll('.note').length;
+  const offset = 40 + (count % 8) * 30;
+  return {
+    top: Math.min(offset, Math.max(0, window.innerHeight - 220)),
+    left: Math.min(offset + 120, Math.max(0, window.innerWidth - 240))
+  };
+}
+
+// 恢复便签时把坐标夹在当前视口内，避免分辨率/显示器变化后便签跑到屏幕外不可见
+function clampPosition(top, left) {
+  const maxTop = Math.max(0, window.innerHeight - 80);
+  const maxLeft = Math.max(0, window.innerWidth - 80);
+  const t = parseFloat(top);
+  const l = parseFloat(left);
+  return {
+    top: isFinite(t) ? Math.min(Math.max(t, 0), maxTop) : null,
+    left: isFinite(l) ? Math.min(Math.max(l, 0), maxLeft) : null
+  };
+}
+
+// 创建新便签；传入 noteData 时按保存的数据恢复。
+// persist=false 供批量加载使用，跳过逐条写存储，避免加载中途用未回填的 DOM 覆写掉已保存的便签
+export function createNote(noteData = null, { persist = true } = {}) {
   const note = document.createElement('div');
   note.className = 'note';
   note.style.backgroundColor = currentColor;
   note.style.position = 'absolute';
+  const initPos = initialPosition();
+  note.style.top = `${initPos.top}px`;
+  note.style.left = `${initPos.left}px`;
   note.style.width = '180px';
   note.style.height = '180px';
   note.style.padding = '10px';
   note.style.pointerEvents = 'auto';
   note.style.resize = 'both';
   note.style.overflow = 'hidden';
-  
+
   // 创建内容容器
   const contentContainer = document.createElement('div');
   contentContainer.style.width = '100%';
   contentContainer.style.height = '100%';
   contentContainer.style.position = 'relative';
 
-  // 创建编辑和预览容器
-  const editorContainer = document.createElement('div');
-  editorContainer.style.display = 'flex';
-  editorContainer.style.width = '100%';
-  editorContainer.style.height = '100%';
-  editorContainer.style.position = 'relative';
-
-  // 添加Markdown编辑区域
-  const textarea = document.createElement('textarea');
-  textarea.style.width = '50%';
-  textarea.style.height = '100%';
-  textarea.style.border = 'none';
-  textarea.style.background = 'transparent';
-  textarea.style.resize = 'none';
-  textarea.style.pointerEvents = 'auto';
-  textarea.style.display = 'block';
-  textarea.style.padding = '10px';
-
-  // 添加HTML预览区域
-  const preview = document.createElement('div');
-  preview.className = 'markdown-preview';
-  preview.style.width = '50%';
-  preview.style.height = '100%';
-  preview.style.overflow = 'auto';
-  preview.style.padding = '10px';
-  preview.style.borderLeft = '1px solid #ddd';
-
-  // 根据预览开关状态初始化布局
-  const isPreviewEnabled = localStorage.getItem('markdownPreviewEnabled') === 'true';
-  preview.style.display = isPreviewEnabled ? 'block' : 'none';
-  textarea.style.width = isPreviewEnabled ? '50%' : '100%';
-
-  // 初始化Markdown渲染器
-  const markdownRenderer = new MarkdownRenderer(textarea, preview);
-
-  // 实时Markdown解析
-  textarea.addEventListener('input', () => {
-    markdownRenderer.scheduleRender();
-    saveNotes();
-  });
-
-  editorContainer.appendChild(textarea);
-  editorContainer.appendChild(preview);
-  contentContainer.appendChild(editorContainer);
+  // 分块 Markdown 编辑器（所见即所得）：聚焦块显示原文，其余块实时渲染
+  const editorHost = document.createElement('div');
+  editorHost.className = 'md-editor';
+  contentContainer.appendChild(editorHost);
   note.appendChild(contentContainer);
+
+  // CSS resize 不触发任何事件，用 ResizeObserver 监听缩放并防抖保存尺寸
+  let resizeObserver = null;
+  if (typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(() => scheduleSave());
+    resizeObserver.observe(note);
+  }
 
   // 添加删除按钮
   const deleteBtn = document.createElement('button');
@@ -82,7 +105,10 @@ export function createNote() {
   deleteBtn.style.border = 'none';
   deleteBtn.style.cursor = 'pointer';
   deleteBtn.onclick = () => {
+    // 删除按钮紧贴拖拽热区，无确认的即时删除曾导致误删丢数据
+    if (!confirm(langText[currentLang].deleteConfirm)) return;
     note.remove();
+    if (resizeObserver) resizeObserver.unobserve(note);
     saveNotes();
   };
   note.appendChild(deleteBtn);
@@ -110,9 +136,28 @@ export function createNote() {
     showContextMenu(note, e.clientX, e.clientY);
   });
 
+  // 按保存的数据恢复颜色、位置和尺寸
+  if (noteData) {
+    const color = noteData.color || currentColor;
+    note.style.backgroundColor = color;
+    currentColor = color;
+    const pos = clampPosition(noteData.top, noteData.left);
+    if (pos.top !== null) note.style.top = `${pos.top}px`;
+    if (pos.left !== null) note.style.left = `${pos.left}px`;
+    if (noteData.width) note.style.width = noteData.width;
+    if (noteData.height) note.style.height = noteData.height;
+  }
+
+  // 构建编辑器（传入 noteData 时按保存的内容恢复，仍是 markdown 字符串）
+  const initialContent =
+    noteData && typeof noteData.content === 'string' ? noteData.content : '';
+  const editor = new BlockEditor(editorHost, initialContent, { onInput: () => saveNotes() });
+  note.__editor = editor;
+
   // 添加到容器
   document.getElementById('notes-container').appendChild(note);
-  saveNotes();
+  if (!noteData) editor.focusFirstBlock();
+  if (persist) saveNotes();
 }
 
 // 显示右键菜单
@@ -155,7 +200,7 @@ export function showContextMenu(note, x, y) {
 // 导出便签
 export async function exportNote(note) {
   try {
-    const content = note.querySelector('textarea').value;
+    const content = note.__editor ? note.__editor.getContent() : '';
     const filePath = await save({
       filters: [{
         name: 'Text',
@@ -217,7 +262,7 @@ export function saveNotes() {
   const notes = [];
   document.querySelectorAll('.note').forEach(note => {
     notes.push({
-      content: note.querySelector('textarea').value,
+      content: note.__editor ? note.__editor.getContent() : '',
       color: note.style.backgroundColor,
       top: note.style.top,
       left: note.style.left,
@@ -230,16 +275,14 @@ export function saveNotes() {
 
 // 加载便签
 export function loadNotes() {
-  const savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
-  savedNotes.forEach(noteData => {
-    createNote();
-    const note = document.querySelector('.note:last-child');
-    note.querySelector('textarea').value = noteData.content;
-    note.style.backgroundColor = noteData.color;
-    note.style.top = noteData.top;
-    note.style.left = noteData.left;
-    note.style.width = noteData.width;
-    note.style.height = noteData.height;
-    currentColor = noteData.color;
-  });
+  let savedNotes = [];
+  try {
+    savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
+  } catch (err) {
+    console.error('Failed to parse saved notes:', err);
+  }
+  if (!Array.isArray(savedNotes)) savedNotes = [];
+  // 批量恢复期间不逐条写存储，全部回填完成后再完整保存一次
+  savedNotes.forEach(noteData => createNote(noteData, { persist: false }));
+  if (savedNotes.length > 0) saveNotes();
 }

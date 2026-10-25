@@ -1,0 +1,19 @@
+# 系统文件
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# AI 助手本地工作说明（仅本地开发使用，不对外发布）
+AGENTS.md
+
+# 临时测试文件（不参与构建与发布）
+/test/
+
+# 构建产物与签名材料（不要入库）
+*.msix
+*.pfx
+*.exe
+codesigning/
+
+# 日志
+*.log

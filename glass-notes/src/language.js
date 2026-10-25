@@ -25,12 +25,14 @@ export const langText = {
           exportNote: '导出便签',
           exportSuccess: '便签导出成功！',
           exportFailed: '便签导出失败，请重试',
+          deleteConfirm: '确定要删除这个便签吗？',
           autoStart: '开机自启动',
           autoStartEnabled: '已启用',
           autoStartDisabled: '已禁用',
-          markdownPreview: 'Markdown预览',
-          markdownPreviewEnabled: '已启用',
-          markdownPreviewDisabled: '已禁用',
+          blurLevel: '背景模糊',
+          blurTransparent: '全透明',
+          blurLiquid: '液态玻璃',
+          blurFrosted: '毛玻璃',
           about: '关于 Glass notes',
           aboutinfo:'本应用基于TAURI平台，由AI辅助生成，用户数据全部离线保存在本地，不涉及任何信息外发，特此声明。<br>联系方式：pinyinzhenhao@aliyun.com'
         },
@@ -51,12 +53,14 @@ export const langText = {
       exportNote: 'Export Note',
       exportSuccess: 'Note exported successfully!',
       exportFailed: 'Failed to export note, please try again',
+      deleteConfirm: 'Are you sure you want to delete this note?',
       autoStart: 'Auto Start',
       autoStartEnabled: 'Enabled',
       autoStartDisabled: 'Disabled',
-      markdownPreview: 'Markdown Preview',
-      markdownPreviewEnabled: 'Enabled',
-      markdownPreviewDisabled: 'Disabled',
+      blurLevel: 'Background Blur',
+      blurTransparent: 'Transparent',
+      blurLiquid: 'Liquid Glass',
+      blurFrosted: 'Frosted Glass',
       about: 'About Glass notes',
       aboutinfo: 'This application is based on the TAURI platform, AI-assisted development. All user data is stored locally offline, no information is sent out. <br> Contact: pinyinzhenhao@aliyun.com'
     },
@@ -77,12 +81,14 @@ export const langText = {
       exportNote: 'Exportar nota',
       exportSuccess: '¡Nota exportada con éxito!',
       exportFailed: 'Error al exportar la nota, por favor inténtelo de nuevo',
+      deleteConfirm: '¿Está seguro de que desea eliminar esta nota?',
       autoStart: 'Inicio automático',
       autoStartEnabled: 'Habilitado',
       autoStartDisabled: 'Deshabilitado',
-      markdownPreview: 'Vista previa de Markdown',
-      markdownPreviewEnabled: 'Habilitado',
-      markdownPreviewDisabled: 'Deshabilitado',
+      blurLevel: 'Desenfoque de fondo',
+      blurTransparent: 'Transparente',
+      blurLiquid: 'Cristal líquido',
+      blurFrosted: 'Cristal esmerilado',
       about: 'Acerca de Glass notes',
       aboutinfo: 'Esta aplicación está basada en la plataforma TAURI, desarrollada con asistencia de IA. Todos los datos del usuario se almacenan localmente sin conexión, no se envía ninguna información. <br>Contacto: pinyinzhenhao@aliyun.com'
     },
@@ -103,12 +109,14 @@ export const langText = {
       exportNote: 'ノートをエクスポート',
       exportSuccess: 'ノートのエクスポートが成功しました！',
       exportFailed: 'ノートのエクスポートに失敗しました。再試行してください',
+      deleteConfirm: 'この付箋を削除してもよろしいですか？',
       autoStart: '自動起動',
       autoStartEnabled: '有効',
       autoStartDisabled: '無効',
-      markdownPreview: 'Markdownプレビュー',
-      markdownPreviewEnabled: '有効',
-      markdownPreviewDisabled: '無効',
+      blurLevel: '背景のぼかし',
+      blurTransparent: '完全透明',
+      blurLiquid: 'リキッドグラス',
+      blurFrosted: 'すりガラス',
       about: 'Glass notesについて',
       aboutinfo: 'このアプリケーションはTAURIプラットフォームに基づいており、AI支援開発です。すべてのユーザーデータはローカルにオフラインで保存され、情報は送信されません。<br>連絡先: pinyinzhenhao@aliyun.com'
     },
@@ -129,12 +137,14 @@ export const langText = {
       exportNote: '노트 내보내기',
       exportSuccess: '노트 내보내기 성공!',
       exportFailed: '노트 내보내기 실패, 다시 시도해 주세요',
+      deleteConfirm: '이 메모를 삭제하시겠습니까?',
       autoStart: '자동 시작',
       autoStartEnabled: '활성화됨',
       autoStartDisabled: '비활성화됨',
-      markdownPreview: 'Markdown 미리보기',
-      markdownPreviewEnabled: '활성화됨',
-      markdownPreviewDisabled: '비활성화됨',
+      blurLevel: '배경 흐림',
+      blurTransparent: '완전 투명',
+      blurLiquid: '리퀴드 글래스',
+      blurFrosted: '서리 유리',
       about: 'Glass notes 정보',
       aboutinfo: '이 애플리케이션은 TAURI 플랫폼을 기반으로 하며 AI 지원 개발입니다. 모든 사용자 데이터는 로컬에서 오프라인으로 저장되며 정보는 전송되지 않습니다. <br>연락처: pinyinzhenhao@aliyun.com'
     },
@@ -158,12 +168,14 @@ export const langText = {
       exportNote: 'Экспорт заметки',
       exportSuccess: 'Заметка успешно экспортирована!',
       exportFailed: 'Не удалось экспортировать заметку, попробуйте снова',
+      deleteConfirm: 'Вы уверены, что хотите удалить эту заметку?',
       autoStart: 'Автозапуск',
       autoStartEnabled: 'Включено',
       autoStartDisabled: 'Отключено',
-      markdownPreview: 'Предпросмотр Markdown',
-      markdownPreviewEnabled: 'Включено',
-      markdownPreviewDisabled: 'Отключено',
+      blurLevel: 'Размытие фона',
+      blurTransparent: 'Прозрачный',
+      blurLiquid: 'Жидкое стекло',
+      blurFrosted: 'Матовое стекло',
       about: 'О Glass notes',
       aboutinfo: 'Это приложение основано на платформе TAURI, разработано с помощью ИИ. Все пользовательские данные хранятся локально в автономном режиме, информация не передается.<br>Контакты: pinyinzhenhao@aliyun.com'
     },
@@ -187,12 +199,14 @@ export const langText = {
       exportNote: 'Exporter la note',
       exportSuccess: 'Note exportée avec succès !',
       exportFailed: 'Échec de l\'exportation de la note, veuillez réessayer',
+      deleteConfirm: 'Êtes-vous sûr de vouloir supprimer cette note ?',
       autoStart: 'Démarrage automatique',
       autoStartEnabled: 'Activé',
       autoStartDisabled: 'Désactivé',
-      markdownPreview: 'Aperçu Markdown',
-      markdownPreviewEnabled: 'Activé',
-      markdownPreviewDisabled: 'Désactivé',
+      blurLevel: 'Flou de l\'arrière-plan',
+      blurTransparent: 'Transparent',
+      blurLiquid: 'Verre liquide',
+      blurFrosted: 'Verre dépoli',
       about: 'À propos de Glass notes',
       aboutinfo: 'Cette application est basée sur la plateforme TAURI, développée avec l\'aide de l\'IA. Toutes les données utilisateur sont stockées localement hors ligne, aucune information n\'est transmise.<br>Contact : pinyinzhenhao@aliyun.com'
     },
@@ -216,12 +230,14 @@ export const langText = {
       exportNote: 'Notiz exportieren',
       exportSuccess: 'Notiz erfolgreich exportiert!',
       exportFailed: 'Export der Notiz fehlgeschlagen, bitte versuchen Sie es erneut',
+      deleteConfirm: 'Sind Sie sicher, dass Sie diese Notiz löschen möchten?',
       autoStart: 'Autostart',
       autoStartEnabled: 'Aktiviert',
       autoStartDisabled: 'Deaktiviert',
-      markdownPreview: 'Markdown-Vorschau',
-      markdownPreviewEnabled: 'Aktiviert',
-      markdownPreviewDisabled: 'Deaktiviert',
+      blurLevel: 'Hintergrund-Weichzeichnung',
+      blurTransparent: 'Transparent',
+      blurLiquid: 'Liquid Glass',
+      blurFrosted: 'Milchglas',
       about: 'Über Glass notes',
       aboutinfo: 'Diese Anwendung basiert auf der TAURI-Plattform und wurde mit KI-Unterstützung erstellt. Alle Benutzerdaten werden lokal offline gespeichert, es erfolgt keine Übermittlung von Informationen nach außen. Hierwith wird dies ausdrücklich erklärt. <br>Kontakt: pinyinzhenhao@aliyun.com'
     }
@@ -238,12 +254,14 @@ export function updateUILanguage() {
   document.querySelectorAll('.hint').forEach(el => 
     el.textContent = lang.shortcutHint || 'Click "Reset Shortcut", then press new shortcut combination, and click "Apply"'
   );
-  document.getElementById('markdown-preview-label').textContent = lang.markdownPreview;
+  document.getElementById('blur-level-label').textContent = lang.blurLevel;
+  document.getElementById('blur-level-0').textContent = lang.blurTransparent;
+  document.getElementById('blur-level-1').textContent = lang.blurLiquid;
+  document.getElementById('blur-level-2').textContent = lang.blurFrosted;
   document.getElementById('about-title').textContent = lang.about;
   document.getElementById('note-shortcut-label').textContent = lang.noteShortcutLabel;
   document.getElementById('record-note-shortcut').textContent = lang.record;
   document.getElementById('apply-note-shortcut').textContent = lang.apply;
-  updateMDpreviewLabel();
   updateAutoStartLabel();
 }
 
@@ -253,10 +271,4 @@ export function updateAutoStartLabel() {
   const autoStartLabel = document.getElementById('auto-start-label');
   const autoStartSwitch = document.getElementById('auto-start-switch');
   autoStartLabel.textContent = `${lang.autoStart}: ${autoStartSwitch.checked ? lang.autoStartEnabled : lang.autoStartDisabled}`;
-}
-export function updateMDpreviewLabel() {
-  const lang = langText[currentLang];
-  const MDpreviewLabel = document.getElementById('markdown-preview-label');
-  const MDpreviewSwitch = document.getElementById('markdown-preview-switch');
-  MDpreviewLabel.textContent = `${lang.markdownPreview}: ${MDpreviewSwitch.checked ? lang.markdownPreviewEnabled : lang.markdownPreviewDisabled}`;
 }

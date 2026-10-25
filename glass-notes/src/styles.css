@@ -3,9 +3,8 @@ html,body {
   margin: 0;
   padding: 0;
   overflow: auto;
-  resize: both;
   background: transparent;
-  
+
 }
 
 /* 便签样式 */
@@ -124,16 +123,139 @@ html,body {
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* 文本区域样式 */
-.note textarea {
-  font-family: Arial, sans-serif;
-  font-size: 20px;
-  line-height: 1.5;
-  outline: none;
-  padding: 10px;
+/* 分块 Markdown 编辑器（所见即所得） */
+.md-editor {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
   box-sizing: border-box;
-  background: transparent;
-  resize: both;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.md-block {
+  min-height: 1.6em;
+  padding: 2px 4px;
+  margin: 0 0 4px 0;
+  cursor: text;
+  word-break: break-word;
+}
+
+.md-block:focus {
+  outline: none;
+}
+
+/* 编辑态：高亮层（带样式文字）+ 输入层（透明文字）叠放。
+   两层必须 font/line-height/padding 完全一致，文字才能逐字符对齐 */
+.md-block.md-editing {
+  position: relative;
+}
+
+.md-hl,
+.md-input {
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  line-height: inherit;
+}
+
+.md-hl {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: #1a1a1a;
+}
+
+.md-input {
+  position: relative;
+  min-height: 1.6em;
+  color: transparent;
+  caret-color: #1a1a1a;
+  outline: none;
+}
+
+/* 语法高亮：符号淡化、内容即时呈现样式。
+   不改字号/不换等宽字体（会破坏两层对齐），只用字重/斜体/颜色/背景 */
+.hl-sym { opacity: 0.35; }
+.hl-done { color: #2e9e4f; font-weight: 700; }
+.hl-bold { font-weight: 700; }
+.hl-ital { font-style: italic; }
+.hl-strike { text-decoration: line-through; }
+.hl-code { background: rgba(0,0,0,0.08); border-radius: 3px; }
+.hl-h { font-weight: 700; }
+.hl-quote { color: #666; }
+.hl-link { color: #007bff; text-decoration: underline; }
+.hl-url { opacity: 0.4; }
+
+/* Markdown 渲染样式（原 .markdown-preview 规则迁移） */
+.md-block h1,
+.md-block h2,
+.md-block h3 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+}
+
+.md-block h1 {
+  font-size: 1.5em;
+}
+
+.md-block h2 {
+  font-size: 1.3em;
+}
+
+.md-block h3 {
+  font-size: 1.1em;
+}
+
+.md-block p {
+  margin: 0.5em 0;
+}
+
+.md-block ul,
+.md-block ol {
+  padding-left: 2em;
+  margin: 0.5em 0;
+}
+
+.md-block code {
+  background: rgba(0,0,0,0.05);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.md-block pre {
+  background: rgba(0,0,0,0.05);
+  padding: 0.5em;
+  border-radius: 3px;
+  overflow: auto;
+}
+
+.md-block blockquote {
+  border-left: 3px solid rgba(0,0,0,0.1);
+  padding-left: 1em;
+  margin: 1em 0;
+  color: #666;
+}
+
+.md-block a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.md-block a:hover {
+  text-decoration: underline;
+}
+
+/* marked 生成的待办方框是 disabled 的，事件走块级坐标命中，
+   pointer-events:none 保证点击落到块上 */
+.md-block input[type="checkbox"] {
+  pointer-events: none;
+  margin-right: 4px;
 }
 
 /* 删除按钮样式 */
@@ -256,76 +378,42 @@ html,body {
   width: 100%;
 }
 
+/* 背景模糊档位按钮 */
+.blur-level-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.blur-level-buttons button {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.blur-level-buttons button:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.blur-level-buttons button.active {
+  background: rgba(0, 123, 255, 0.8);
+  color: white;
+  transform: scale(1.05);
+}
+
 .language-buttons button {
   width: 100%;
   min-width: 80px;
   padding: 8px;
-}
-
-/* Markdown preview styles */
-.markdown-preview {
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.markdown-preview h1,
-.markdown-preview h2,
-.markdown-preview h3 {
-  margin: 1em 0 0.5em;
-  font-weight: bold;
-}
-
-.markdown-preview h1 {
-  font-size: 1.5em;
-}
-
-.markdown-preview h2 {
-  font-size: 1.3em;
-}
-
-.markdown-preview h3 {
-  font-size: 1.1em;
-}
-
-.markdown-preview p {
-  margin: 0.5em 0;
-}
-
-.markdown-preview ul,
-.markdown-preview ol {
-  padding-left: 2em;
-  margin: 0.5em 0;
-}
-
-.markdown-preview code {
-  background: rgba(0,0,0,0.05);
-  padding: 0.2em 0.4em;
-  border-radius: 3px;
-  font-family: monospace;
-}
-
-.markdown-preview pre {
-  background: rgba(0,0,0,0.05);
-  padding: 0.5em;
-  border-radius: 3px;
-  overflow: auto;
-}
-
-.markdown-preview blockquote {
-  border-left: 3px solid rgba(0,0,0,0.1);
-  padding-left: 1em;
-  margin: 1em 0;
-  color: #666;
-}
-
-.markdown-preview a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.markdown-preview a:hover {
-  text-decoration: underline;
 }
 
 .language-buttons button {

@@ -1,4 +1,5 @@
 {
+  "name": "glass-notes",
   "private": true,
   "scripts": {
     "dev": "vite",

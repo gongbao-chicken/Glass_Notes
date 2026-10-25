@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,12 +34,13 @@
           <span class="slider"></span>
         </label>
       </div>
-      <div class="setting-item">
-        <label id="markdown-preview-label">Markdown预览</label>
-        <label class="switch">
-          <input type="checkbox" id="markdown-preview-switch">
-          <span class="slider"></span>
-        </label>
+      <div class="setting-item" id="blur-level-item">
+        <label id="blur-level-label">背景模糊</label>
+        <div class="blur-level-buttons">
+          <button id="blur-level-0" data-level="0">全透明</button>
+          <button id="blur-level-1" data-level="1">液态玻璃</button>
+          <button id="blur-level-2" data-level="2">毛玻璃</button>
+        </div>
       </div>
       <div class="setting-item">
         <label id="language-label">语言</label>
@@ -64,7 +65,7 @@
           <img src="assets/Glass_notes.svg" alt="App Icon" >
           <div class="modal-header">
             <h2 id="about-Glassnotes"></h2>
-            <p id = "version">V0.1.2 ©2025 Scour Fan</p>
+            <p id = "version">V0.2.0 ©2025 Scour Fan</p>
           </div>
           <div id="about-content"></div>
         </div>

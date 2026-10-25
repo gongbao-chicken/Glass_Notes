@@ -4,6 +4,9 @@ const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig({
 
+  // 前端源码在 src/ 子目录（package.json 位于项目根 glass-notes/）
+  root: 'src',
+
   // prevent vite from obscuring rust errors
   clearScreen: false,
   server: {
